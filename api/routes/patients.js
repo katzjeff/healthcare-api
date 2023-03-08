@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 
 //Get list of patients
 router.get("/", (req, res, next) => {
@@ -42,4 +42,4 @@ router.patch("/:patientId", (req, res, next) => {
     });
   });
 
-module.exports = router;
+export default router;

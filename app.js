@@ -1,10 +1,10 @@
-const express = require("express");
+import express from "express";
 const app = express();
-require("dotenv").config();
-const userRoutes = require("./api/routes/users");
-const patientRoutes = require("./api/routes/patients");
+// require("dotenv").config();
+import userRoutes from "./api/routes/users.js";
+import patientRoutes from "./api/routes/patients.js";
 
 //Middleware
 app.use("/users", userRoutes);
 app.use("/patients", patientRoutes);
-module.exports = app;
+export default app;
