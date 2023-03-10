@@ -1,30 +1,30 @@
 import { Router } from "express";
 const router = Router();
 
-//Get list of patients
+//Get list of doctors
 router.get("/", (req, res, next) => {
   res.status(200).json({
-    message: "Showing list of patients",
+    message: "Showing list of doctors",
   });
 });
 
-//Create list of patients
+//Create list of doctors
 router.post("/", (req, res, next) => {
-  const patient = {
-    patientName: req.body.patientName,
-    age: req.body.age,
-    gender: req.body.gender,
+  const doctor = {
+    doctorName: req.body.doctorName,
+    email: req.body.email,
+    telephone: req.body.telephone,
   }
 
   res.status(201).json({
-    message: "Created patient",
-    createdPatient: patient
+    message: "Created doctor",
+    createdPatient: doctor
   });
 });
 
-//Individual patients with ID
-router.get("/:patientId", (req, res, next) => {
-    const id = req.params.patientId
+//Individual doctors with ID
+router.get("/:doctorId", (req, res, next) => {
+    const id = req.params.doctorId
   if (id === "great") {
     res.status(201).json({
       message: "You hit the jackpot",
@@ -37,15 +37,15 @@ router.get("/:patientId", (req, res, next) => {
   }
 });
 
-router.patch("/:patientId", (req, res, next) => {
+router.patch("/:doctorId", (req, res, next) => {
     res.status(200).json({
       message: "Updated user details",
     });
   });
   
-  router.delete("/:patientId", (req, res, next) => {
+  router.delete("/:doctorId", (req, res, next) => {
     res.status(200).json({
-      message: "Deleted patient details",
+      message: "Deleted doctor details",
     });
   });
 
