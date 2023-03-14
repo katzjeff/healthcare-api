@@ -4,7 +4,8 @@ dotenv.config();
 const app = express();
 import morgan from "morgan";
 import bodyParser from "body-parser";
-import cors from "cors"
+import cors from "cors";
+import mongoose from "mongoose";
 
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "*");
@@ -23,6 +24,12 @@ import cors from "cors"
 import userRoutes from "./api/routes/users.js";
 import patientRoutes from "./api/routes/patients.js";
 import doctorsRoutes from "./api/routes/doctors.js";
+
+//connecting to mongo db using mongoose
+
+mongoose.connect(process.env.MONGODB_URL, {
+  useNewUrlParser: true,
+});
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
