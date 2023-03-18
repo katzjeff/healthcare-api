@@ -75,12 +75,15 @@ export const patchPatient = (req, res, next) => {
   // for (const ops of req.body) {
   //   updateOps[ops.propName] = ops.value;
   // }
-  Patients.updateOne(
+  
+  Patients.findByIdAndUpdate(
     { _id: req.params.patientId },
     {
       $set: {
         // updateOps,
-        patientName: req.body.updatedName,
+        patientName: req.body.patientName,
+        age: req.body.age,
+        gender: req.body.gender
       },
     }
   )

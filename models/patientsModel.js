@@ -7,6 +7,4 @@ const patientSchema = mongoose.Schema({
   gender: String,
 });
 
-// module.exports = mongoose.model("Patient", patientSchema);
-
 export default mongoose.models?.Patients || mongoose.model("Patients", patientSchema);
