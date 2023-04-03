@@ -3,16 +3,35 @@ import Patients from "../models/patientsModel.js";
 
 export const getPatients = (req, res, next) => {
   Patients.find()
+    .select("patientName age gender _id")
     .exec()
-    .then((docs) => {
-      console.log(docs);
-      if (docs.length >= 0) {
-        res.status(200).json(docs);
-      } else {
-        res.status(404).json({
-          message: "No Entries found, please create a new patient",
-        });
-      }
+    .then((patients) => {
+      const response = {
+        count: patients.length,
+        patients: patients.map(patients => {
+          return {
+            patientName: patients.name,
+            age: patients.age,
+            gender: patients.gender,
+            _id: patients._id,
+            request: {
+              type: "GET",
+              url: "http://localhost:4000/patients/" + patients._id
+            }
+
+          }
+        })
+      };
+      // if (docs.length >= 0) {
+      res.status(200).json({
+        response,
+        patients,
+      });
+      // } else {
+      //   res.status(404).json({
+      //     message: "No Entries found, please create a new patient",
+      //   });
+      // }
     })
     .catch((err) => {
       console.log(err);
@@ -36,7 +55,16 @@ export const postPatient = (req, res, next) => {
       console.log(result);
       res.status(201).json({
         message: "Created patient",
-        createdPatient: result,
+        createdPatient: {
+          patientName: result.patientName,
+          age: result.age,
+          gender: result.gender,
+          _id: result._id,
+          request: {
+            type: "GET",
+            url: "http://localhost:4000/patients/" + result._id
+          }
+        }
       });
     })
     .catch((err) => {
@@ -50,11 +78,19 @@ export const postPatient = (req, res, next) => {
 export const getPatient = (req, res, next) => {
   const id = req.params.patientId;
   Patients.findById(id)
+    .select('patientName age gender _id')
     .exec()
-    .then((doc) => {
-      console.log(doc);
-      if (doc) {
-        res.status(200).json(doc);
+    .then((patient) => {
+      console.log(patient);
+      if (patient) {
+        res.status(200).json({
+          patient: patient,
+          request: {
+            type: "GET",
+            description: "Get list of all other patients using the link below",
+            url: "http://localhost:4000/patients"
+          }
+        });
       } else {
         res.status(400).json({
           message: "No valid user provided for id " + id,
@@ -75,7 +111,7 @@ export const patchPatient = (req, res, next) => {
   // for (const ops of req.body) {
   //   updateOps[ops.propName] = ops.value;
   // }
-  
+
   Patients.findByIdAndUpdate(
     { _id: req.params.patientId },
     {
@@ -83,7 +119,7 @@ export const patchPatient = (req, res, next) => {
         // updateOps,
         patientName: req.body.patientName,
         age: req.body.age,
-        gender: req.body.gender
+        gender: req.body.gender,
       },
     }
   )
@@ -91,8 +127,11 @@ export const patchPatient = (req, res, next) => {
     .then((result) => {
       console.log(result);
       res.status(200).json({
-        result,
         message: "Patient has been updated",
+        request: {
+          type: "GET",
+          url: "http://localhost:3000/patients/" + id
+        }
       });
     })
     .catch((err) => {
